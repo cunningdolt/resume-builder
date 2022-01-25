@@ -12,4 +12,9 @@ class User < ApplicationRecord
     has_secure_password
 
     has_one :profile, dependent: :destroy
+
+    after_create :build_profile
+    def build_profile
+        Profile.create(user: self)
+    end
 end
