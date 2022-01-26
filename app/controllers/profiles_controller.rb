@@ -9,6 +9,12 @@ class ProfilesController < ApplicationController
         updated_profile_params = update_array_attributes_in_params(profile_params)
         @profile = Profile.find(params[:id])
         if @profile.update(updated_profile_params)
+            if profile_params[:experiences_attributes]
+                profile_params[:experiences_attributes].each do |key, exp|
+                    e = Experience.where(id: exp["id"])
+                    e.update(exp_params(exp))
+                end
+            end
             flash[:success] = "Profile updated successfully."
             redirect_to edit_url
         else
@@ -27,7 +33,12 @@ class ProfilesController < ApplicationController
         def profile_params
             params.require(:profile).permit(:name, :job_title, :total_experience, :overview, 
                 :career_highlights, :primary_skills, :secondary_skills,
-                :educations_attributes => [ :id, :school, :degree, :description, :start, :end, :_destroy]
+                :educations_attributes => [ :id, :school, :degree, :description, :start, :end, :_destroy],
+                :experiences_attributes => {}
             )
+        end
+
+        def exp_params(exp)
+            exp.slice(:projects_attributes, :id, :company, :position, :description, :start, :end)
         end
 end
