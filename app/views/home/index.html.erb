@@ -5,10 +5,9 @@
         <h1 class="text-3xl"> 
             Welcome, <span class="text-purple-600 font-semibold"><%= @user.name %><span>
         </h1>
-        <h4 class="text-3xl">
-        <%= link_to "Public URL for your resume", url_for(@user) %>
-        </h4>
-        <a
+        <p class="text-xl">
+            <u><%= link_to "Click here to get public URL for your resume", url_for(@user), target: :_blank, rel: 'noopener' %></u>
+        </p>
         <%= render 'shared/input/buttons/secondary', color: "purple", label: "Edit", href: edit_url %>
     </div>
     
